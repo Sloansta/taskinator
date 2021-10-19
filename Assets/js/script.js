@@ -1,5 +1,6 @@
 let formEl = document.querySelector("#task-form");
 let tasksToDoEl = document.querySelector("#tasks-to-do");
+let pageContentEl = document.querySelector("#page-content");
 let taskIdCounter = 0;
 
 
@@ -12,7 +13,7 @@ function taskFormHandler(event) {
         alert("You need to fill out the task form!");
         return false;
     }
-    
+
     formEl.reset();
 
     let taskDataObj = {
@@ -39,7 +40,72 @@ function createTaskEl(taskDataObj) {
     listItemEL.appendChild(taskInfoEl);
 
     // add entire list item to list
+    let taskActionsEl = createTaskActions(taskIdCounter);
+    listItemEL.appendChild(taskActionsEl);
+
     tasksToDoEl.appendChild(listItemEL);
+
+    // Increase task counter for next unique id 
+    taskIdCounter++;
+}
+
+function createTaskActions(taskId) {
+    let actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+
+    let editButtonEl = document.createElement("button");
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(editButtonEl);
+
+    // Create delete button
+    let deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className = "btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    let statusSelectEl = document.createElement("select");
+    statusSelectEl.className = "select-status";
+    statusSelectEl.setAttribute("name", "status-change");
+    statusSelectEl.setAttribute("data-task-id", taskId);
+
+    let statusChoices = ["To Do", "In Progress", "Completed"];
+
+    for(let i = 0; i < statusChoices.length; i++) {
+        // create option element
+        let statusOptionEl = document.createElement("option");
+        statusOptionEl.textContent = statusChoices[i];
+        statusOptionEl.setAttribute("value", statusChoices[i]);
+
+        // append to select
+        statusSelectEl.appendChild(statusOptionEl);
+    }
+
+    actionContainerEl.appendChild(statusSelectEl);
+
+    return actionContainerEl;
+}
+
+function taskButtonHandler(event) {
+    console.log(event.target);
+    if(event.target.matches(".delete-btn")) {
+        console.log("You clicked the delete button!");
+        let taskId = event.target.getAttribute("data-task-id");
+        console.log(taskId);
+        deleteTask(taskId);
+    }
+}
+
+//Bug here!!! Work on a fix tomorrow.
+function deleteTask(taskId) {
+    let taskSelected = document.querySelector(".task-item[data-task-id='0']");
+    console.log(taskSelected);
+    //taskSelected.remove();
 }
 
 formEl.addEventListener("submit", taskFormHandler);
+pageContentEl.addEventListener("click", taskButtonHandler);
