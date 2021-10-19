@@ -102,9 +102,10 @@ function taskButtonHandler(event) {
 
 //Bug here!!! Work on a fix tomorrow.
 function deleteTask(taskId) {
-    let taskSelected = document.querySelector(".task-item[data-task-id='0']");
+    console.log(taskId);
+    let taskSelected = document.querySelector("select[data-task-id='"+ taskId +"']").parentNode.parentNode;
     console.log(taskSelected);
-    //taskSelected.remove();
+    taskSelected.remove(); //This throws an error because it returns as null and I am not entirely sure why
 }
 
 formEl.addEventListener("submit", taskFormHandler);
