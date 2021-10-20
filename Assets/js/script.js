@@ -92,20 +92,33 @@ function createTaskActions(taskId) {
 
 function taskButtonHandler(event) {
     console.log(event.target);
-    if(event.target.matches(".delete-btn")) {
+
+    let targetEl = event.target;
+
+    if(targetEl.matches(".edit-btn")) {
+        let taskId = targetEl.getAttribute("data-task-id");
+        editTask(taskId);
+    }else if(targedtEl.matches(".delete-btn")) {
         console.log("You clicked the delete button!");
-        let taskId = event.target.getAttribute("data-task-id");
+        let taskId = targetEl.getAttribute("data-task-id");
         console.log(taskId);
         deleteTask(taskId);
     }
+   
 }
 
-//Bug here!!! Work on a fix tomorrow.
+// edit a task
+function editTask(taskId) {
+    console.log("editing task #" + taskId);
+    let taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']").parentNode.parentNode;
+}
+
+// delete a task 
 function deleteTask(taskId) {
     console.log(taskId);
     let taskSelected = document.querySelector("select[data-task-id='"+ taskId +"']").parentNode.parentNode;
     console.log(taskSelected);
-    taskSelected.remove(); //This throws an error because it returns as null and I am not entirely sure why
+    taskSelected.remove(); 
 }
 
 formEl.addEventListener("submit", taskFormHandler);
