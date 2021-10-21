@@ -3,6 +3,7 @@ let tasksToDoEl = document.querySelector("#tasks-to-do");
 let pageContentEl = document.querySelector("#page-content");
 let tasksInProgressEl = document.querySelector("#tasks-in-progress");
 let tasksCompletedEl = document.querySelector("#tasks-completed");
+let tasks = [];
 let taskIdCounter = 0;
 
 
@@ -26,7 +27,8 @@ function taskFormHandler(event) {
     }else {
         let taskDataObj = {
             name: taskNameInput, 
-            type: taskTypeInput
+            type: taskTypeInput,
+            status: "to do"
         };
         createTaskEl(taskDataObj);
     }
@@ -38,6 +40,13 @@ function completeEditTask(taskName, taskType, taskId) {
 
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    for(let i = 0; i < tasks.length; i++) {
+        if(tasks[i].id === parseInt(taskId)) {
+            tasks[i].name = taskName;
+            tasks[i].type = taskType;
+        }
+    }
 
     alert("Task Updated!");
 
@@ -65,6 +74,10 @@ function createTaskEl(taskDataObj) {
     listItemEL.appendChild(taskActionsEl);
 
     tasksToDoEl.appendChild(listItemEL);
+
+    // update task id and push task to the tasks array
+    taskDataObj.id = taskIdCounter;
+    tasks.push(taskDataObj);
 
     // Increase task counter for next unique id 
     taskIdCounter++;
@@ -150,6 +163,17 @@ function deleteTask(taskId) {
     let taskSelected = document.querySelector("select[data-task-id='"+ taskId +"']").parentNode.parentNode;
     console.log(taskSelected);
     taskSelected.remove(); 
+
+    let updatedTaskArr = [];
+
+    for(let i = 0; i < tasks.length; i++) {
+        // if tasks[i].id doesn't match the value of taskId, it will skip that task
+        if(tasks[i].id !== parseInt(taskId))
+            updatedTaskArr.push(tasks[i]);
+    }
+
+    // reassign tasks array to be the same as updatedTaskArr
+    tasks = updatedTaskArr;
 }
 
 
@@ -173,6 +197,11 @@ function taskStatusChangeHandler(event) {
         tasksInProgressEl.appendChild(taskSelected);
     else if(statusValue === "completed")
         tasksCompletedEl.appendChild(taskSelected);
+
+    for(let i = 0; i < tasks.length; i++) {
+        if(tasks[i].id === parseInt(taskId))
+            tasks[i].status = statusValue;
+    }
 }
 
 formEl.addEventListener("submit", taskFormHandler);
