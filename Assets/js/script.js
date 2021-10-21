@@ -1,6 +1,8 @@
 let formEl = document.querySelector("#task-form");
 let tasksToDoEl = document.querySelector("#tasks-to-do");
 let pageContentEl = document.querySelector("#page-content");
+let tasksInProgressEl = document.querySelector("#tasks-in-progress");
+let tasksCompletedEl = document.querySelector("#tasks-completed");
 let taskIdCounter = 0;
 
 
@@ -16,12 +18,31 @@ function taskFormHandler(event) {
 
     formEl.reset();
 
-    let taskDataObj = {
-        name: taskNameInput, 
-        type: taskTypeInput
-    };
+    let isEdit = formEl.hasAttribute("data-task-id");
+    console.log(isEdit);
+    if(isEdit) {
+        let taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    }else {
+        let taskDataObj = {
+            name: taskNameInput, 
+            type: taskTypeInput
+        };
+        createTaskEl(taskDataObj);
+    }
+}
 
-    createTaskEl(taskDataObj);
+function completeEditTask(taskName, taskType, taskId) {
+    console.log(taskName, taskType, taskId);
+    let taskSelected = document.querySelector(".btn[data-task-id='" + taskId + "']").parentNode.parentNode;
+
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
 }
 
 function createTaskEl(taskDataObj) {
@@ -108,8 +129,6 @@ function taskButtonHandler(event) {
 }
 
 // edit a task
-
-// issues: When editing a task, it  creates a whole new task instead of editing the task that you want to edit. User will have to delete the task again 
 function editTask(taskId) {
     console.log("editing task #" + taskId);
     let taskSelected = document.querySelector(".btn[data-task-id='" + taskId + "']").parentNode.parentNode; //There is probably a better way to do this. 
@@ -119,8 +138,7 @@ function editTask(taskId) {
     let taskType = taskSelected.querySelector("span.task-type").textContent;
     console.log(taskType);
 
-    document.querySelector ("input[name='task-name']").value = taskName;
-    document.querySelector("select[name='task-type']").value = taskType;
+
     document.querySelector("#save-task").textContent = "Save Task";
 
     formEl.setAttribute("data-task-id", taskId);
