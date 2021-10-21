@@ -98,7 +98,7 @@ function taskButtonHandler(event) {
     if(targetEl.matches(".edit-btn")) {
         let taskId = targetEl.getAttribute("data-task-id");
         editTask(taskId);
-    }else if(targedtEl.matches(".delete-btn")) {
+    }else if(targetEl.matches(".delete-btn")) {
         console.log("You clicked the delete button!");
         let taskId = targetEl.getAttribute("data-task-id");
         console.log(taskId);
@@ -108,9 +108,22 @@ function taskButtonHandler(event) {
 }
 
 // edit a task
+
+// issues: When editing a task, it  creates a whole new task instead of editing the task that you want to edit. User will have to delete the task again 
 function editTask(taskId) {
     console.log("editing task #" + taskId);
-    let taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']").parentNode.parentNode;
+    let taskSelected = document.querySelector(".btn[data-task-id='" + taskId + "']").parentNode.parentNode; //There is probably a better way to do this. 
+    let taskName = taskSelected.querySelector("h3.task-name").textContent;
+    console.log(taskName + " This is the task name!");
+
+    let taskType = taskSelected.querySelector("span.task-type").textContent;
+    console.log(taskType);
+
+    document.querySelector ("input[name='task-name']").value = taskName;
+    document.querySelector("select[name='task-type']").value = taskType;
+    document.querySelector("#save-task").textContent = "Save Task";
+
+    formEl.setAttribute("data-task-id", taskId);
 }
 
 // delete a task 
