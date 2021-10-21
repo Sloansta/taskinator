@@ -152,5 +152,29 @@ function deleteTask(taskId) {
     taskSelected.remove(); 
 }
 
+
+// changes tasks status
+function taskStatusChangeHandler(event) {
+    console.log(event.target);
+    console.log(event.target.getAttribute("data-task-id"));
+
+    // get the task item's id
+    let taskId = event.target.getAttribute("data-task-id");
+
+    // get the currently selected option's value and convert to lowercase
+    let statusValue = event.target.value.toLowerCase();
+
+    // find the parent task item element pased on the id
+    let taskSelected = document.querySelector(".btn[data-task-id='"+ taskId + "']").parentNode.parentNode;
+
+    if(statusValue === "to do")
+        tasksToDoEl.appendChild(taskSelected);
+    else if(statusValue === "in progress")
+        tasksInProgressEl.appendChild(taskSelected);
+    else if(statusValue === "completed")
+        tasksCompletedEl.appendChild(taskSelected);
+}
+
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
+pageContentEl.addEventListener("change", taskStatusChangeHandler);
