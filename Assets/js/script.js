@@ -7,6 +7,8 @@ let tasks = [];
 let taskIdCounter = 0;
 
 
+
+
 function taskFormHandler(event) {
     event.preventDefault();
     let taskNameInput = document.querySelector("input[name='task-name']").value;
@@ -36,7 +38,7 @@ function taskFormHandler(event) {
 
 function completeEditTask(taskName, taskType, taskId) {
     console.log(taskName, taskType, taskId);
-    let taskSelected = document.querySelector(".btn[data-task-id='" + taskId + "']").parentNode.parentNode;
+    let taskSelected = document.querySelector(".btn[data-task-id='" + taskId + "']").parentNode;
 
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
@@ -215,6 +217,23 @@ function taskStatusChangeHandler(event) {
 function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+
+// loads tasks from local storage.
+function loadTasks() {
+    let local = localStorage.getItem("tasks");
+    console.log(local);
+    tasks = JSON.parse(local); 
+    console.log(tasks);
+
+    if(tasks == null) {
+        tasks = []; 
+        return false;
+    }
+}
+
+loadTasks();
+
 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
