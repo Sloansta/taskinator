@@ -249,11 +249,14 @@ function loadTasks() {
         if(tasks[i].status == "to do") {
             listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
             tasksToDoEl.appendChild(listItemEl);
+            document.querySelector("#tasks-to-do").appendChild(listItemEl);
         }else if(tasks[i].status == "in progress") {
             listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
             tasksToDoEl.appendChild(listItemEl);
+            document.querySelector("#tasks-in-progress").appendChild(listItemEl);
         }else if(tasks[i].status == "complete") {
-            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            //listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            document.querySelector("#tasks-completed").appendChild(listItemEl);
         }
         taskIdCounter++;
         console.log(listItemEl);
